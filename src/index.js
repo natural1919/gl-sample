@@ -14,10 +14,15 @@ function addText (text) {
 }
 
 function init () {
-
+    document.addEventListener('keydown', (event) => {
+        const keyName = event.key;
+        console.log(keyName)
+        addText(keyName)
+    })
 }
 
 window.onload = function(){
-    document.body.appendChild( component() );
-    printMe();
+    // document.body.appendChild( component() );
+    // printMe();
+    init()
 }
