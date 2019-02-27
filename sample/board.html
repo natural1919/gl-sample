@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Board</title>
+
+    <div class="board">
+        <canvas id='boardCanvas' width=400 height=400></canvas>
+    </div>
+
+    <style>
+        body {
+        }
+        .board {
+            width: 400px;
+            height: 400px;
+            border: 1px solid white;
+            box-sizing: content-box;
+        }
+    </style>
+  </head>
+  <body>
+
+    <script >
+        // const params
+        var ctx = null;
+
+        var WIDTH = 400
+        var HEIGHT = 400 
+        
+        var start = null
+
+        var ball = { x:10, y:10, w: 10, h:10, vx: 200, vy: 200}
+
+        var balls = []
+        
+        function gen_ball (p_x, p_y, p_w, p_h, p_vx, p_vy, p_color){
+            var obj = Object.create({x: p_x, y: p_y, w: p_w, h: p_h, vx: p_vx, vy: p_vy})
+            if(p_color == undefined){
+                obj.color = 'red'
+            } else {
+                obj.color = p_color
+            }
+
+            obj.drawBall = function(timePassed){
+
+            this.x += this.vx * timePassed
+            this.y += this.vy * timePassed
+
+            if(this.x > WIDTH - this.w){
+                this.x = WIDTH - this.w
+                this.vx = - this.vx
+            } else if(this.x < 0 ) {
+                this.x = 0  
+                this.vx = - this.vx
+            } else if(this.y > HEIGHT - this.h) {
+                this.y = HEIGHT - this.h
+                this.vy = - this.vy
+            } else if(this.y < 0 ) {
+                this.y = 0  
+                this.vy = - this.vy
+            }  else {
+
+            }
+
+            ctx.fillStyle = this.color 
+            ctx.fillRect(this.x, this.y, this.w, this.h)
+
+        }
+        return obj;
+
+
+
+        }
+
+        // main func
+        window.onload = function(){
+            initBoard()
+            for(var i = 1; i!= 3; i++){
+                (function(){
+                    balls.push(gen_ball(
+                        Math.random() * 400,
+                        Math.random() * 400, 4, 4,
+                        Math.random() * 1000, 
+                        Math.random() * 1000,
+                        randomColor()
+                        ))
+                })();
+            }
+            render()
+        }
+
+        function randomColor(){
+            var newColors = [
+                '#1ABC9C', '#2ECC71', '#3498DB', '#9B59B6', '#34495E',
+                '#F1C40F', '#D35400', '#E74C3C', '#ECF0F1', '#7F8C8D' 
+            ]
+            var colors = [
+                            'aqua', 'black', 'blue', 'fuchsia',
+                            'gray','green','lime','maroon','navy',
+                            'olive','purple','red','silver',
+                            'teal','white','yellow', 'orange'
+                            ]
+            var num = 100 * Math.random()
+            var index = parseInt(num) % newColors.length - 1 
+            if(index < 0){
+                return randomColor()
+            }
+            return newColors[index]
+        }
+
+        // functions
+        function initBoard(){
+            var canvas = document.getElementById('boardCanvas')
+            ctx = canvas.getContext('2d')
+            // ctx.fillStyle = '#67C23A'
+            ctx.fillStyle = 'black'
+            ctx.fillRect(0, 0, 400, 400)
+
+            canvas.addEventListener('mousedown', function(e) {
+                var posX = e.clientX - 9 // canvas offset * + 1 
+                var posY = e.clientY - 9 // canvas offset 8 + 1 
+
+                balls.push(gen_ball(
+                        posX, posY, 4, 4,
+                        Math.random() * 1000, 
+                        Math.random() * 1000,
+                        randomColor()
+                        ))
+            })
+
+            document.addEventListener('keydown', function (e) {
+                console.log(e.key + '\n')
+            })
+
+            document.addEventListener('keyup', function (e) {
+            })
+
+        }
+
+        function draw(timePassed) {
+            // ctx.fillStyle = '#67C23A'
+            ctx.fillStyle = 'black'
+            ctx.fillRect(0, 0, 400, 400)
+            balls.forEach(function(b){
+                b.drawBall(timePassed)
+            })
+        }
+
+        function tick(timestamp) {
+            if(!start){
+                start = 0 
+            }
+            var timePassed = ( timestamp - start) / 1000
+            draw(timePassed)
+            window.requestAnimationFrame(tick)
+            start = timestamp
+        }
+
+        function render(){
+            window.requestAnimationFrame(tick)
+        }
+        
+
+    </script>
+
+  </body>
+</html>
+

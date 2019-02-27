@@ -1,0 +1,27 @@
+button{
+    margin: 10px 20px;
+    border: 1px solid #999999;
+    padding: 10px 20px;
+    background-color: white;
+    outline: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+button:active{
+    background-color: #999999;
+    color: white;
+}
+
+.box{
+    margin: 10px 20px;
+    border: 1px solid #999999;
+    padding: 10px 20px;
+    background-color: white;
+    outline: none;
+    border-radius: 5px;
+    display: inline-block;
+}
+.box:hover{
+    background-color: #999999;
+    color: white;
+}

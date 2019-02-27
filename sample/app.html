@@ -1,0 +1,59 @@
+<html>
+	<head>
+		<title>My first three.js app</title>
+		<style>
+			body { margin: 0; }
+			canvas { width: 100%; height: 100% }
+		</style>
+	</head>
+	<body>
+		<script src="public/three.js"></script>
+		<script>
+			var scene = new THREE.Scene();
+			var camera = new THREE.PerspectiveCamera( 60, window.innerWidth/window.innerHeight, 1, 2100 );
+
+            var hero = null;
+
+			var renderer = new THREE.WebGLRenderer();
+			renderer.setSize( window.innerWidth, window.innerHeight );
+			document.body.appendChild( renderer.domElement );
+
+			var geometry = new THREE.BoxGeometry( 1, 1, 1 );
+			var material = new THREE.MeshBasicMaterial( { color: 0x00FF00 } );
+			var cube = new THREE.Mesh( geometry, material );
+			scene.add( cube );
+
+            function createSprite(texture) {
+                var material = new THREE.SpriteMaterial({ map: texture }) 
+
+                var mWidth = material.map.image.width
+                var mHeight = material.map.image.height
+
+                hero = new THREE.Sprite( material )
+                hero.center.set(0.0, 1.0)
+                hero.scale.set( mWidth, mHeight, 1)
+                hero.position.set(0, 0, -5)
+                scene.add(hero)
+            }
+
+
+            var textureLoader = new THREE.TextureLoader();
+            textureLoader.load('https://threejs.org/examples/textures/sprite1.png', createSprite)
+
+
+			camera.position.z = 4;
+            cube.position.z = -10;
+
+			var animate = function () {
+				requestAnimationFrame( animate );
+
+				cube.rotation.x += 0.01;
+				cube.rotation.y += 0.01;
+
+				renderer.render( scene, camera );
+			};
+
+			animate();
+		</script>
+	</body>
+</html>
