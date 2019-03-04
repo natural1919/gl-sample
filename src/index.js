@@ -17,7 +17,9 @@ function init () {
 
 }
 
+/*
 window.onload = function(){
     document.body.appendChild( component() );
     printMe();
 }
+*/
